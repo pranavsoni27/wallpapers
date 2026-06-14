@@ -3,7 +3,7 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 export const SUPABASE_URL =
   import.meta.env.VITE_SUPABASE_URL || 'https://pyupazjotylqflopynwh.supabase.co';
 
-export const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+export const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_FRfOXCDZl5rjjS3BgNEgvw_XLm_sJ7r';
 
 export const ADMIN_EMAIL = 'pranavsoni2702@gmail.com';
 export const DEMO_DOWNLOAD_LIMIT = 5;
