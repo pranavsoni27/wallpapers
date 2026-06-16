@@ -53,6 +53,13 @@ export const Navbar: React.FC = () => {
     }
   };
 
+  const getUserInitials = () => {
+    const email = user?.email || '';
+    const name = user?.user_metadata?.full_name || user?.user_metadata?.name || '';
+    const displayName = name || email;
+    return displayName.slice(0, 2).toUpperCase();
+  };
+
   useEffect(() => {
     if (!showLogoutConfirm) {
       setAnchorRect(null);
@@ -114,9 +121,9 @@ export const Navbar: React.FC = () => {
 
             {isAuthenticated ? (
               <div className="hidden md:flex items-center gap-3">
-                <span className="text-sm text-white/70 max-w-[160px] truncate">
-                  {user?.email}
-                </span>
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-pink-500 flex items-center justify-center text-white font-semibold text-sm">
+                  {getUserInitials()}
+                </div>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -175,7 +182,11 @@ export const Navbar: React.FC = () => {
             <div className="px-4 pt-4 mt-2 border-t border-white/10">
               {isAuthenticated ? (
                 <>
-                  <p className="text-white/60 text-sm mb-3 truncate">{user?.email}</p>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-pink-500 flex items-center justify-center text-white font-semibold text-sm">
+                      {getUserInitials()}
+                    </div>
+                  </div>
                   <Button
                     variant="outline"
                     size="sm"

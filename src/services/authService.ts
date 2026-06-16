@@ -35,10 +35,35 @@ export const authService = {
   },
 
   async signOut() {
-    if (!isSupabaseConfigured) return;
-    const { error } = await getSupabase().auth.signOut();
-    if (error) throw error;
-  },
+  console.log('authService.signOut called');
+  console.log('isSupabaseConfigured:', isSupabaseConfigured);
+
+  if (!isSupabaseConfigured) return;
+
+  try {
+    await Promise.race([
+      getSupabase().auth.signOut({ scope: 'local' }), // 'local' clears only this tab's session
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('signOut timeout')), 3000)
+      ),
+    ]);
+    console.log('Supabase signOut completed');
+  } catch (error) {
+    console.warn('Supabase signOut failed or timed out:', error);
+  } finally {
+    // Force clear all Supabase keys from storage
+    Object.keys(localStorage).forEach((key) => {
+      if (key.startsWith('sb-')) {
+        localStorage.removeItem(key);
+      }
+    });
+    Object.keys(sessionStorage).forEach((key) => {
+      if (key.startsWith('sb-')) {
+        sessionStorage.removeItem(key);
+      }
+    });
+  }
+},
 
   async getSession() {
     if (!isSupabaseConfigured) return null;

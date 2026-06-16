@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState, useRef } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
 import { authService, userService } from '@/services';
 import { ADMIN_EMAIL, DEMO_DOWNLOAD_LIMIT } from '@/lib/supabase';
@@ -35,6 +35,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState<AuthModalMode>('login');
+  const isSigningOutRef = useRef(false);
 
   const loadProfile = useCallback(async (authUser: User) => {
     const userProfile = await userService.ensureProfile(
@@ -73,6 +74,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
 
     const { data: listener } = authService.onAuthStateChange(async (_event, nextSession) => {
+      if (isSigningOutRef.current) return;
+      
       setSession(nextSession);
       setUser(nextSession?.user ?? null);
 
@@ -124,8 +127,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signOut = useCallback(async () => {
-    await authService.signOut();
-    setProfile(null);
+    isSigningOutRef.current = true;
+    try {
+      await authService.signOut();
+      setUser(null);
+      setSession(null);
+      setProfile(null);
+    } finally {
+      setTimeout(() => {
+        isSigningOutRef.current = false;
+      }, 100);
+    }
   }, []);
 
   const recordDownload = useCallback(async () => {
