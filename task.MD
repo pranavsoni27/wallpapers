@@ -1,7 +1,7 @@
 Build a complete production-ready Wallpaper Gallery Website using React + TypeScript + Vite + Tailwind CSS.
 
 PROJECT NAME:
-WallpaperVerse
+Jyora
 
 PURPOSE:
 Create a modern wallpaper browsing and downloading platform that fetches wallpaper data dynamically from:
@@ -66,7 +66,7 @@ NAVBAR
 ======
 
 Logo:
-WallpaperVerse
+Jyora
 
 Menu:
 

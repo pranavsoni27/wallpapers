@@ -24,9 +24,9 @@ export const useFeaturedWallpapers = () => {
     queryKey: ['featured-wallpapers'],
     queryFn: async () => {
       const wallpapers = await wallpaperService.fetchWallpapers();
-      return wallpaperService.getFeaturedWallpapers(wallpapers);
+      return wallpaperService.getRandomFeaturedWallpapers(wallpapers, 5);
     },
-    staleTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 60 * 60 * 1000, // 1 hour - cache for a full day's use
   });
 };
 
@@ -49,5 +49,27 @@ export const useNewestWallpapers = () => {
       return wallpaperService.getNewestWallpapers(wallpapers);
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
+
+export const useRandomHomeWallpapers = (count: number = 10) => {
+  return useQuery({
+    queryKey: ['random-home-wallpapers', count],
+    queryFn: async () => {
+      const wallpapers = await wallpaperService.fetchWallpapers();
+      return wallpaperService.getRandomWallpapers(wallpapers, count);
+    },
+    staleTime: 60 * 60 * 1000, // 1 hour - cache for a full day's use
+  });
+};
+
+export const useRandomAllWallpapers = () => {
+  return useQuery({
+    queryKey: ['random-all-wallpapers'],
+    queryFn: async () => {
+      const wallpapers = await wallpaperService.fetchWallpapers();
+      return wallpaperService.getAllWallpapersRandomized(wallpapers);
+    },
+    staleTime: 60 * 60 * 1000, // 1 hour - cache for a full day's use
   });
 };

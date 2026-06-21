@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { WallpaperGrid, WallpaperModals, SearchModal, FilterSidebar, BackToTop } from '@/components/features';
 import { FunnelIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui';
-import { useWallpapers, useWallpaperModals } from '@/hooks';
+import { useRandomAllWallpapers, useWallpaperModals } from '@/hooks';
 import { useAppStore } from '@/store';
 
 export const AllWallpapersPage: React.FC = () => {
-  const { filters, setIsSearchOpen } = useAppStore();
-  const { data: wallpapers, isLoading } = useWallpapers(filters);
+  const { setIsSearchOpen } = useAppStore();
+  const { data: wallpapers, isLoading } = useRandomAllWallpapers();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const wallpaperModals = useWallpaperModals();
 
@@ -17,7 +17,7 @@ export const AllWallpapersPage: React.FC = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           <h1 className="text-4xl font-bold text-white">
-            {filters.category ? filters.category : 'All Wallpapers'}
+            All Wallpapers
           </h1>
           <div className="flex items-center gap-3">
             <Button

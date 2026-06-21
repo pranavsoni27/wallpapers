@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   MagnifyingGlassIcon,
   HeartIcon,
@@ -14,9 +14,11 @@ import { useFavorites } from '@/hooks';
 import { useAuth } from '@/contexts/AuthProvider';
 import { Button } from '@/components/ui';
 import { cn } from '@/utils';
+import logoImg from '@/images/jyora1.png';
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { setIsSearchOpen } = useAppStore();
   const { count } = useFavorites();
   const { isAuthenticated, isAdmin, user, signOut, openAuthModal } = useAuth();
@@ -71,10 +73,8 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
-              <span className="text-white font-bold text-lg">W</span>
-            </div>
-            <span className="text-white font-bold text-xl">WallpaperVerse</span>
+            <img src={logoImg} alt="Jyora" className="w-8 h-8 rounded-lg" />
+            <span className="text-white font-bold text-xl" style={{color: "#daaf47"}}>Jyora</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
@@ -102,8 +102,14 @@ export const Navbar: React.FC = () => {
               <MagnifyingGlassIcon className="w-5 h-5 text-white" />
             </button>
 
-            <Link
-              to="/favorites"
+            <button
+              onClick={() => {
+                if (isAuthenticated) {
+                  navigate('/favorites');
+                } else {
+                  openAuthModal('login');
+                }
+              }}
               className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors relative"
               aria-label="Favorites"
             >
@@ -117,7 +123,7 @@ export const Navbar: React.FC = () => {
                   {count}
                 </span>
               )}
-            </Link>
+            </button>
 
             {isAuthenticated ? (
               <div className="hidden md:flex items-center gap-3">

@@ -3,17 +3,17 @@ import { Link } from 'react-router-dom';
 import { Hero, WallpaperGrid, WallpaperModals, SearchModal, FilterSidebar, BackToTop } from '@/components/features';
 import { FunnelIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui';
-import { useWallpapers, useWallpaperModals } from '@/hooks';
+import { useRandomHomeWallpapers, useWallpaperModals } from '@/hooks';
 import { useAppStore } from '@/store';
 
 export const HomePage: React.FC = () => {
   const { filters } = useAppStore();
-  const { data: wallpapers, isLoading } = useWallpapers(filters);
+  const { data: wallpapers, isLoading } = useRandomHomeWallpapers(10);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const wallpaperModals = useWallpaperModals();
 
-  // Show only 10 wallpapers on home page
-  const displayWallpapers = (wallpapers || []).slice(0, 10);
+  // Display random wallpapers that change daily
+  const displayWallpapers = wallpapers || [];
 
   return (
     <>

@@ -1,4 +1,5 @@
 import { Wallpaper, WallpaperFilters } from '@/types';
+import { getRandomItemsWithDailySeed } from '@/utils/randomizer';
 
 const API_URL = 'https://xbccmcszhnybxzlirjgk.supabase.co/storage/v1/object/public/wallpaper/gallery.json';
 const ANALYTICS_URL = 'https://xbccmcszhnybxzlirjgk.supabase.co/functions/v1/wallpaper-download-counter';
@@ -134,5 +135,29 @@ export const wallpaperService = {
     return [...wallpapers]
       .sort((a, b) => new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime())
       .slice(0, 10);
+  },
+
+  /**
+   * Get random featured wallpapers that change daily
+   * Uses seeded random selection to ensure consistency throughout the day
+   */
+  getRandomFeaturedWallpapers(wallpapers: Wallpaper[], count: number = 5): Wallpaper[] {
+    return getRandomItemsWithDailySeed(wallpapers, count);
+  },
+
+  /**
+   * Get random wallpapers from all available wallpapers that change daily
+   * Perfect for home page display to show different images each day
+   */
+  getRandomWallpapers(wallpapers: Wallpaper[], count: number = 10): Wallpaper[] {
+    return getRandomItemsWithDailySeed(wallpapers, count);
+  },
+
+  /**
+   * Get all wallpapers in random order that changes daily
+   * Perfect for All Wallpapers page to show all available wallpapers randomly shuffled
+   */
+  getAllWallpapersRandomized(wallpapers: Wallpaper[]): Wallpaper[] {
+    return getRandomItemsWithDailySeed(wallpapers, wallpapers.length);
   },
 };

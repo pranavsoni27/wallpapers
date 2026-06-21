@@ -1,4 +1,4 @@
-# WallpaperVerse
+# Jyora
 
 A modern, production-ready wallpaper gallery website built with React, TypeScript, Vite, and Tailwind CSS.
 
