@@ -2,7 +2,7 @@ import React from 'react';
 import { FunnelIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui';
 import { useAppStore } from '@/store';
-import { CATEGORIES, DOWNLOAD_RESOLUTIONS } from '@/types';
+import { CATEGORIES } from '@/types';
 import { cn } from '@/utils';
 
 interface FilterSidebarProps {
@@ -15,10 +15,6 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose })
 
   const handleCategoryChange = (category: string) => {
     setFilters({ category: filters.category === category ? undefined : category });
-  };
-
-  const handleResolutionChange = (resolution: string) => {
-    setFilters({ resolution: filters.resolution === resolution ? undefined : resolution });
   };
 
   const handleSortChange = (sortBy: string) => {
@@ -77,27 +73,6 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose })
                     )}
                   >
                     {category}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Resolutions */}
-            <div>
-              <h3 className="text-sm font-semibold text-white/80 mb-3">Resolutions</h3>
-              <div className="space-y-2">
-                {DOWNLOAD_RESOLUTIONS.map((res) => (
-                  <button
-                    key={res.label}
-                    onClick={() => handleResolutionChange(res.label)}
-                    className={cn(
-                      'w-full px-4 py-2 rounded-lg text-left transition-colors',
-                      filters.resolution === res.label
-                        ? 'bg-primary text-white'
-                        : 'bg-white/5 text-white/70 hover:bg-white/10'
-                    )}
-                  >
-                    {res.label}
                   </button>
                 ))}
               </div>

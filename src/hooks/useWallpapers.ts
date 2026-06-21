@@ -6,11 +6,7 @@ export const useWallpapers = (filters?: WallpaperFilters) => {
   const query = useQuery({
     queryKey: ['wallpapers', filters],
     queryFn: async () => {
-      const wallpapers = await wallpaperService.fetchWallpapers();
-      if (filters) {
-        return wallpaperService.filterWallpapers(wallpapers, filters);
-      }
-      return wallpapers;
+      return await wallpaperService.fetchWallpapers();
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes

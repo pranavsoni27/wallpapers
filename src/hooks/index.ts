@@ -5,3 +5,5 @@ export * from './useDebounce';
 export * from './useDevToolsProtection';
 export * from './useWallpaperModals';
 export * from './useWallpaperDownload';
+export * from './useRedirectOnLogout';
+export * from './useScrollToTop';

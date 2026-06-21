@@ -3,14 +3,27 @@ import { motion } from 'framer-motion';
 import { WallpaperGrid, WallpaperModals, SearchModal, FilterSidebar, BackToTop } from '@/components/features';
 import { FunnelIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui';
-import { useRandomAllWallpapers, useWallpaperModals } from '@/hooks';
+import { useWallpapers, useWallpaperModals } from '@/hooks';
 import { useAppStore } from '@/store';
+import { wallpaperService } from '@/services';
 
 export const AllWallpapersPage: React.FC = () => {
-  const { setIsSearchOpen } = useAppStore();
-  const { data: wallpapers, isLoading } = useRandomAllWallpapers();
+  const { setIsSearchOpen, filters } = useAppStore();
+  const { data: allWallpapers, isLoading } = useWallpapers();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const wallpaperModals = useWallpaperModals();
+
+  // Apply filters to wallpapers
+  const filteredWallpapers = React.useMemo(() => {
+    if (!allWallpapers) return [];
+    
+    // Apply filters from store
+    if (Object.keys(filters).length === 0) {
+      return allWallpapers;
+    }
+    
+    return wallpaperService.filterWallpapers(allWallpapers, filters);
+  }, [allWallpapers, filters]);
 
   return (
     <>
@@ -65,7 +78,7 @@ export const AllWallpapersPage: React.FC = () => {
 
         {/* Grid */}
         <WallpaperGrid
-          wallpapers={wallpapers || []}
+          wallpapers={filteredWallpapers}
           isLoading={isLoading}
           onPreview={wallpaperModals.handlePreview}
           onDownload={wallpaperModals.handleDownload}
