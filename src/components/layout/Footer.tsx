@@ -57,7 +57,7 @@ export const Footer: React.FC = () => {
           </motion.p>
 
           <motion.div variants={itemVariants} className="flex items-center gap-6 text-sm text-white/60">
-            {['Privacy', 'Terms', 'Contact'].map((link, index) => (
+            {['Privacy', 'Terms', 'Contact'].map((link) => (
               <motion.a
                 key={link}
                 href="#"
