@@ -38,7 +38,7 @@ export const Hero: React.FC = () => {
   const currentWallpaper = featuredWallpapers?.[currentIndex];
 
   return (
-    <section className="relative w-full -mt-16 bg-black overflow-hidden">
+    <section className="relative w-full bg-black overflow-hidden mt-0 lg:-mt-16">
       {/* Image area — edge-to-edge full width */}
       <div className="relative w-full aspect-[16/9] min-h-[360px] max-h-[85vh]">
         <AnimatePresence mode="wait">
@@ -96,17 +96,18 @@ export const Hero: React.FC = () => {
             className="w-full max-w-2xl"
           >
             <div className="relative">
-              <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-white/60" />
               <input
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
+                onFocus={() => setIsSearchOpen(true)}
                 placeholder="Search wallpapers..."
                 className={cn(
-                  'w-full pl-12 pr-4 py-4 rounded-xl bg-white/10 backdrop-blur-xl',
-                  'border border-white/20 text-white placeholder-white/60',
-                  'focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent',
-                  'transition-all'
+                  'w-full px-4 py-4 rounded-xl',
+                  'bg-white/5 border border-white/20',
+                  'text-white placeholder-white/60',
+                  'focus:outline-none focus:ring-2 focus:ring-primary focus:border-white/30',
+                  'transition-all shadow-lg shadow-white/10'
                 )}
               />
             </div>

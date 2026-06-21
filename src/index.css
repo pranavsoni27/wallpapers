@@ -14,6 +14,37 @@
   html {
     @apply scroll-smooth;
   }
+
+  /* Custom Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #daaf47 0%, #c99a3d 100%);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #e5c158 0%, #daaf47 100%);
+    box-shadow: 0 0 6px rgba(218, 175, 71, 0.4);
+  }
+
+  /* Firefox Scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #daaf47 transparent;
+  }
+
+  *:hover {
+    scrollbar-color: #e5c158 transparent;
+  }
 }
 
 @layer utilities {

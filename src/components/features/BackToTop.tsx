@@ -32,6 +32,8 @@ export const BackToTop: React.FC = () => {
       animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0 }}
       transition={{ duration: 0.2 }}
       onClick={scrollToTop}
+      whileHover={{ scale: 1.15 }}
+      whileTap={{ scale: 0.9 }}
       className={cn(
         'fixed bottom-8 right-8 p-3 rounded-full bg-gradient-primary',
         'shadow-lg shadow-primary/25 hover:shadow-primary/40',
@@ -40,7 +42,12 @@ export const BackToTop: React.FC = () => {
       )}
       aria-label="Back to top"
     >
-      <ChevronUpIcon className="w-6 h-6 text-white" />
+      <motion.div
+        animate={{ y: isVisible ? [0, -5, 0] : 0 }}
+        transition={{ duration: 1.5, repeat: Infinity }}
+      >
+        <ChevronUpIcon className="w-6 h-6 text-white" />
+      </motion.div>
     </motion.button>
   );
 };

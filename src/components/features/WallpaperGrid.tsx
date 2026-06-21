@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { WallpaperCard } from './WallpaperCard';
 import { Wallpaper, WALLPAPERS_PER_PAGE } from '@/types';
 import { Pagination, Skeleton } from '@/components/ui';
+import { containerVariants } from '@/utils/animations';
 
 interface WallpaperGridProps {
   wallpapers: Wallpaper[];
@@ -59,7 +61,12 @@ export const WallpaperGrid: React.FC<WallpaperGridProps> = ({
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-5">
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-5"
+        variants={containerVariants}
+        initial="initial"
+        animate="animate"
+      >
         {paginatedWallpapers.map((wallpaper) => (
           <WallpaperCard
             key={wallpaper.id}
@@ -68,7 +75,7 @@ export const WallpaperGrid: React.FC<WallpaperGridProps> = ({
             onDownload={onDownload}
           />
         ))}
-      </div>
+      </motion.div>
 
       <Pagination
         currentPage={currentPage}

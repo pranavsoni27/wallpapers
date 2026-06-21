@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { Hero, WallpaperGrid, WallpaperModals, SearchModal, FilterSidebar, BackToTop } from '@/components/features';
 import { FunnelIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui';
@@ -20,26 +21,48 @@ export const HomePage: React.FC = () => {
       <Hero />
 
       <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-bold text-white">
+        <motion.div
+          className="flex items-center justify-between mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+        >
+          <motion.h2
+            className="text-3xl font-bold text-white"
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            viewport={{ once: true }}
+          >
             {filters.category ? filters.category : 'Wallpapers'}
-          </h2>
-          <div className="flex gap-3">
-            <Button
-              variant="outline"
-              onClick={() => setIsFilterOpen(true)}
-              className="flex items-center gap-2"
-            >
-              <FunnelIcon className="w-5 h-5" />
-              Filters
-            </Button>
-            <Link to="/all-wallpapers">
-              <Button className="flex items-center gap-2">
-                All Wallpapers
+          </motion.h2>
+          <motion.div
+            className="flex gap-3"
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="outline"
+                onClick={() => setIsFilterOpen(true)}
+                className="flex items-center gap-2"
+              >
+                <FunnelIcon className="w-5 h-5" />
+                Filters
               </Button>
-            </Link>
-          </div>
-        </div>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link to="/all-wallpapers">
+                <Button className="flex items-center gap-2">
+                  All Wallpapers
+                </Button>
+              </Link>
+            </motion.div>
+          </motion.div>
+        </motion.div>
 
         <WallpaperGrid
           wallpapers={displayWallpapers}

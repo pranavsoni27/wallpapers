@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
   MagnifyingGlassIcon,
   HeartIcon,
@@ -26,6 +27,7 @@ export const Navbar: React.FC = () => {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const logoutRef = useRef<HTMLButtonElement | null>(null);
   const mobileLogoutRef = useRef<HTMLButtonElement | null>(null);
+  const popupRef = useRef<HTMLDivElement | null>(null);
   const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null);
 
   const navItems = [
@@ -68,6 +70,27 @@ export const Navbar: React.FC = () => {
     }
   }, [showLogoutConfirm]);
 
+  // Close popup when clicking outside
+  useEffect(() => {
+    if (!showLogoutConfirm) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      
+      // Don't close if clicking on the logout button itself or inside the popup
+      if (
+        popupRef.current && !popupRef.current.contains(target) &&
+        !logoutRef.current?.contains(target) &&
+        !mobileLogoutRef.current?.contains(target)
+      ) {
+        setShowLogoutConfirm(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showLogoutConfirm]);
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-40 bg-white/5 backdrop-blur-2xl border border-white/10 shadow-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -77,32 +100,52 @@ export const Navbar: React.FC = () => {
             <span className="text-white font-bold text-xl" style={{color: "#daaf47"}}>Jyora</span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
-              <Link
+          <motion.div
+            className="hidden md:flex items-center gap-8"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            {navItems.map((item, index) => (
+              <motion.div
                 key={item.path}
-                to={item.path}
-                className={cn(
-                  'text-sm font-medium transition-colors flex items-center gap-1.5',
-                  isActive(item.path) ? 'text-primary' : 'text-white/70 hover:text-white'
-                )}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                {item.name === 'Admin' && <ShieldCheckIcon className="w-4 h-4" />}
-                {item.name}
-              </Link>
+                <Link
+                  to={item.path}
+                  className={cn(
+                    'text-sm font-medium transition-colors flex items-center gap-1.5 relative group',
+                    isActive(item.path) ? 'text-primary' : 'text-white/70 hover:text-white'
+                  )}
+                >
+                  {item.name === 'Admin' && <ShieldCheckIcon className="w-4 h-4" />}
+                  {item.name}
+                  {isActive(item.path) && (
+                    <motion.div
+                      className="absolute -bottom-2 left-0 right-0 h-0.5 bg-primary rounded-full"
+                      layoutId="activeIndicator"
+                      transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                    />
+                  )}
+                </Link>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           <div className="flex items-center gap-3">
-            <button
+            <motion.button
               onClick={() => setIsSearchOpen(true)}
               className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
               aria-label="Search"
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              whileTap={{ scale: 0.95 }}
             >
               <MagnifyingGlassIcon className="w-5 h-5 text-white" />
-            </button>
+            </motion.button>
 
-            <button
+            <motion.button
               onClick={() => {
                 if (isAuthenticated) {
                   navigate('/favorites');
@@ -112,6 +155,8 @@ export const Navbar: React.FC = () => {
               }}
               className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors relative"
               aria-label="Favorites"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
             >
               {count > 0 ? (
                 <HeartSolidIcon className="w-5 h-5 text-accent" />
@@ -123,7 +168,7 @@ export const Navbar: React.FC = () => {
                   {count}
                 </span>
               )}
-            </button>
+            </motion.button>
 
             {isAuthenticated ? (
               <div className="hidden md:flex items-center gap-3">
@@ -237,6 +282,7 @@ export const Navbar: React.FC = () => {
         )}
         {showLogoutConfirm && (
           <div
+            ref={popupRef}
             style={{
               position: 'fixed',
               top: anchorRect ? anchorRect.bottom + 8 : undefined,
